@@ -21,12 +21,9 @@ export default function AppWalletProvider({
 }) {
   const network = WalletAdapterNetwork.Devnet;
 
-  // ✅ UPDATED: Access the env variable here
-  // We use useMemo to ensure it doesn't re-calculate on every render
-  const endpoint = useMemo(
-    () => process.env.NEXT_PUBLIC_HELIUS_RPC_URL || "https://api.devnet.solana.com", // Fallback to public devnet if env is missing
-    []
-  );
+  // ✅ FIX: Hardcode the Helius URL to prevent fallback to the blocked public node.
+  // REPLACE 'YOUR_HELIUS_API_KEY' with your actual key from the dashboard.
+  const endpoint = "https://devnet.helius-rpc.com/?api-key=e1ff9818-ff78-440d-b072-feacef08622b";
 
   const wallets = useMemo(
     () => [
