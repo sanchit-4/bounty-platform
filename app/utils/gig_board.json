@@ -1,0 +1,448 @@
+{
+  "address": "7Q7AFiWUCaK4X6enYQY3fNdW2qm9wVLXYA1nhpJ5zKE6",
+  "metadata": {
+    "name": "gigBoard",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "description": "Created with Anchor"
+  },
+  "instructions": [
+    {
+      "name": "acceptCandidate",
+      "discriminator": [
+        52,
+        127,
+        134,
+        17,
+        139,
+        25,
+        127,
+        85
+      ],
+      "accounts": [
+        {
+          "name": "bounty",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  98,
+                  111,
+                  117,
+                  110,
+                  116,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bounty.poster",
+                "account": "bounty"
+              },
+              {
+                "kind": "account",
+                "path": "bounty.id",
+                "account": "bounty"
+              }
+            ]
+          }
+        },
+        {
+          "name": "poster",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "workerAccount",
+          "writable": true,
+          "optional": true
+        }
+      ],
+      "args": [
+        {
+          "name": "candidate",
+          "type": "pubkey"
+        }
+      ]
+    },
+    {
+      "name": "applyForBounty",
+      "discriminator": [
+        255,
+        74,
+        249,
+        166,
+        245,
+        63,
+        72,
+        49
+      ],
+      "accounts": [
+        {
+          "name": "bounty",
+          "writable": true
+        },
+        {
+          "name": "applicant",
+          "writable": true,
+          "signer": true
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "approveWork",
+      "discriminator": [
+        181,
+        118,
+        45,
+        143,
+        204,
+        88,
+        237,
+        109
+      ],
+      "accounts": [
+        {
+          "name": "bounty",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  98,
+                  111,
+                  117,
+                  110,
+                  116,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bounty.poster",
+                "account": "bounty"
+              },
+              {
+                "kind": "account",
+                "path": "bounty.id",
+                "account": "bounty"
+              }
+            ]
+          }
+        },
+        {
+          "name": "poster",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "workerAccount",
+          "writable": true,
+          "optional": true
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "cancelBounty",
+      "discriminator": [
+        79,
+        65,
+        107,
+        143,
+        128,
+        165,
+        135,
+        46
+      ],
+      "accounts": [
+        {
+          "name": "bounty",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  98,
+                  111,
+                  117,
+                  110,
+                  116,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bounty.poster",
+                "account": "bounty"
+              },
+              {
+                "kind": "account",
+                "path": "bounty.id",
+                "account": "bounty"
+              }
+            ]
+          }
+        },
+        {
+          "name": "poster",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "workerAccount",
+          "writable": true,
+          "optional": true
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "postBounty",
+      "discriminator": [
+        40,
+        217,
+        222,
+        103,
+        151,
+        83,
+        147,
+        130
+      ],
+      "accounts": [
+        {
+          "name": "bounty",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  98,
+                  111,
+                  117,
+                  110,
+                  116,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "poster"
+              },
+              {
+                "kind": "arg",
+                "path": "id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "poster",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "systemProgram",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "id",
+          "type": "u64"
+        },
+        {
+          "name": "price",
+          "type": "u64"
+        },
+        {
+          "name": "description",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "submitWork",
+      "discriminator": [
+        158,
+        80,
+        101,
+        51,
+        114,
+        130,
+        101,
+        253
+      ],
+      "accounts": [
+        {
+          "name": "bounty",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  98,
+                  111,
+                  117,
+                  110,
+                  116,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bounty.poster",
+                "account": "bounty"
+              },
+              {
+                "kind": "account",
+                "path": "bounty.id",
+                "account": "bounty"
+              }
+            ]
+          }
+        },
+        {
+          "name": "poster",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "workerAccount",
+          "writable": true,
+          "optional": true
+        }
+      ],
+      "args": [
+        {
+          "name": "link",
+          "type": "string"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "bounty",
+      "discriminator": [
+        237,
+        16,
+        105,
+        198,
+        19,
+        69,
+        242,
+        234
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "unauthorized",
+      "msg": "Unauthorized access."
+    },
+    {
+      "code": 6001,
+      "name": "invalidState",
+      "msg": "Invalid state."
+    },
+    {
+      "code": 6002,
+      "name": "wrongWorker",
+      "msg": "Wrong worker account."
+    },
+    {
+      "code": 6003,
+      "name": "tooManyCandidates",
+      "msg": "Candidate list full."
+    },
+    {
+      "code": 6004,
+      "name": "notACandidate",
+      "msg": "User is not a candidate."
+    }
+  ],
+  "types": [
+    {
+      "name": "bounty",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "id",
+            "type": "u64"
+          },
+          {
+            "name": "poster",
+            "type": "pubkey"
+          },
+          {
+            "name": "price",
+            "type": "u64"
+          },
+          {
+            "name": "description",
+            "type": "string"
+          },
+          {
+            "name": "state",
+            "type": {
+              "defined": {
+                "name": "bountyState"
+              }
+            }
+          },
+          {
+            "name": "worker",
+            "type": {
+              "option": "pubkey"
+            }
+          },
+          {
+            "name": "candidates",
+            "type": {
+              "vec": "pubkey"
+            }
+          },
+          {
+            "name": "submission",
+            "type": {
+              "option": "string"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "bountyState",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "open"
+          },
+          {
+            "name": "inProgress"
+          },
+          {
+            "name": "review"
+          },
+          {
+            "name": "completed"
+          },
+          {
+            "name": "cancelled"
+          }
+        ]
+      }
+    }
+  ]
+}
