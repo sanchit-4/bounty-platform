@@ -20,9 +20,6 @@ export default function AppWalletProvider({
   children: React.ReactNode;
 }) {
   const network = WalletAdapterNetwork.Devnet;
-
-  // ✅ FIX: Hardcode the Helius URL to prevent fallback to the blocked public node.
-  // REPLACE 'YOUR_HELIUS_API_KEY' with your actual key from the dashboard.
   const endpoint = "https://devnet.helius-rpc.com/?api-key=e1ff9818-ff78-440d-b072-feacef08622b";
 
   const wallets = useMemo(

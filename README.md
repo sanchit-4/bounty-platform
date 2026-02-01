@@ -1,118 +1,225 @@
-# gig-board
+# 🛡️ Solana Gig Board (Decentralized Bounty Platform)
 
-Next.js starter with Tailwind CSS, `@solana/react-hooks`, and an Anchor vault program example.
+A trustless, decentralized freelance marketplace built on the Solana Blockchain. Connects job posters with workers using secure Smart Contract Escrows.
 
-## Getting Started
+## 🌟 Overview
 
-```shell
-npx -y create-solana-dapp@latest -t solana-foundation/templates/kit/gig-board
+Gig Board solves the problem of trust in freelance work. Instead of relying on a middleman (like Upwork or Fiverr) to hold funds, this platform uses Solana Smart Contracts.
+
+    Posters lock SOL into a secure Program Derived Address (PDA) when creating a gig.
+
+    Workers apply and get selected.
+
+    Payments are automatic and atomic upon approval—no manual transfers, no delays.
+
+## ✨ Key Features
+
+    🔒 On-Chain Escrow: Funds are locked in the smart contract the moment a gig is posted. The poster cannot run away with the money, and the worker cannot get paid without approval.
+
+    🤝 Candidate Selection: Posters can view a list of applicants and select the best candidate for the job.
+
+    🔗 Proof of Work: Workers submit a submission link (GitHub, Figma, Google Drive) directly to the blockchain.
+
+    ⚡ Instant Payouts: Once the work is approved, the smart contract instantly transfers the locked SOL to the worker's wallet.
+
+    🌍 Global & Permissionless: Anyone with a Solana wallet (Phantom, Solflare) can participate without registration.
+
+## 🏗️ Tech Stack
+Blockchain (Backend)
+
+    Language: Rust
+
+    Framework: Anchor (v0.30.1)
+
+    Network: Solana Devnet
+
+    RPC Provider: Helius (for high-performance connection)
+
+Client (Frontend)
+
+    Framework: Next.js 14 (App Router)
+
+    Language: TypeScript
+
+    Styling: Tailwind CSS
+
+    Wallet Integration: @solana/wallet-adapter
+
+    Deployment: Vercel
+
+## ⚙️ Smart Contract Architecture
+
+The core logic is built around a State Machine stored in the Bounty account:
+
+    Open: Gig is posted, SOL is in escrow. Candidates can apply.
+
+    InProgress: A worker has been selected.
+
+    Review: Worker has submitted a link. Poster is reviewing.
+
+    Completed: Work approved, funds released to worker.
+
+    Cancelled: Poster cancelled before selecting a worker (refunds SOL).
+
+Data Structure (lib.rs)
+```Rust
+
+pub struct Bounty {
+    pub id: u64,              // Unique ID
+    pub poster: Pubkey,       // Owner
+    pub price: u64,           // Amount in Lamports
+    pub description: String,  // Task details
+    pub state: BountyState,   // Current status
+    pub worker: Option<Pubkey>, 
+    pub candidates: Vec<Pubkey>,
+    pub submission: Option<String> // Link to work
+}
 ```
+## 🚀 Getting Started
+Prerequisites
 
-```shell
-npm install   # Builds program and generates client automatically
+    Node.js (v18+)
+
+    Rust & Cargo
+
+    Solana CLI
+
+    Anchor CLI
+
+    Phantom Wallet extension
+
+1. Installation
+
+Clone the repository:
+```Bash
+
+git clone https://github.com/your-username/gig-board.git
+cd gig-board
+```
+2. Backend Setup (Smart Contract)
+
+Navigate to the anchor folder:
+```Bash
+
+cd anchor
+```
+Install dependencies:
+```Bash
+
+npm install
+```
+Build the program:
+```Bash
+
+anchor build
+```
+Deploy to Devnet:
+
+    Set config to devnet: solana config set --url https://api.devnet.solana.com
+
+    Get some devnet SOL: solana airdrop 2
+
+    Deploy: anchor deploy
+
+    Important: Copy the new Program ID generated after deployment.
+
+Update lib.rs and Anchor.toml with your new Program ID if it changed.
+
+3. Frontend Setup
+
+Navigate to the root folder:
+```Bash
+
+cd ..
+npm install
+```
+Environment Variables: Create a .env.local file in the root directory:
+```Bash
+
+NEXT_PUBLIC_HELIUS_RPC_URL=https://devnet.helius-rpc.com/?api-key=YOUR_HELIUS_KEY
+```
+Update Program ID: Open app/hooks/useGigBoardProgram.ts (or your constants file) and replace the PROGRAM_ID with the address you got from the backend deployment step.
+
+Run the development server:
+```Bash
+
 npm run dev
 ```
+Visit http://localhost:3000 to interact with the app.
+## 🧪 How to Test (User Flow)
 
-Open [http://localhost:3000](http://localhost:3000), connect your wallet, and interact with the vault on devnet.
+Since this is a marketplace, you will need two different wallets to test the full flow.
 
-## What's Included
+    Wallet A (Poster):
 
-- **Wallet connection** via `@solana/react-hooks` with auto-discovery
-- **SOL Vault program** - deposit and withdraw SOL from a personal PDA vault
-- **Codama-generated client** - type-safe program interactions using `@solana/kit`
-- **Tailwind CSS v4** with light/dark mode
+        Connect Wallet A.
 
-## Stack
+        Click "Post Gig" and enter a description + price (e.g., 0.1 SOL).
 
-| Layer          | Technology                              |
-| -------------- | --------------------------------------- |
-| Frontend       | Next.js 16, React 19, TypeScript        |
-| Styling        | Tailwind CSS v4                         |
-| Solana Client  | `@solana/client`, `@solana/react-hooks` |
-| Program Client | Codama-generated, `@solana/kit`         |
-| Program        | Anchor (Rust)                           |
+        Approve transaction.
 
-## Project Structure
+    Wallet B (Worker):
 
-```
-├── app/
-│   ├── components/
-│   │   ├── providers.tsx      # Solana client setup
-│   │   └── vault-card.tsx     # Vault deposit/withdraw UI
-│   ├── generated/vault/       # Codama-generated program client
-│   └── page.tsx               # Main page
-├── anchor/                    # Anchor workspace
-│   └── programs/vault/        # Vault program (Rust)
-└── codama.json                # Codama client generation config
-```
+        Disconnect Wallet A and connect Wallet B.
 
-## Deploy Your Own Vault
+        You will see the new gig. Click "Apply".
 
-The included vault program is already deployed to devnet. To deploy your own:
+    Wallet A (Poster):
 
-### Prerequisites
+        Switch back to Wallet A.
 
-- [Rust](https://rustup.rs/)
-- [Solana CLI](https://solana.com/docs/intro/installation)
-- [Anchor](https://www.anchor-lang.com/docs/installation)
+        You will see Wallet B in the "Candidates" list.
 
-### Steps
+        Click "Select Worker".
 
-1. **Configure Solana CLI for devnet**
+    Wallet B (Worker):
 
-   ```bash
-   solana config set --url devnet
-   ```
+        Switch to Wallet B.
 
-2. **Create a wallet (if needed) and fund it**
+        Click "Submit Work" and paste a URL (e.g., a GitHub link).
 
-   ```bash
-   solana-keygen new
-   solana airdrop 2
-   ```
+    Wallet A (Poster):
 
-3. **Build and deploy the program**
+        Switch to Wallet A.
 
-   ```bash
-   cd anchor
-   anchor build
-   anchor keys sync    # Updates program ID in source
-   anchor build        # Rebuild with new ID
-   anchor deploy
-   cd ..
-   ```
+        Review the link. Click "Approve & Pay".
 
-4. **Regenerate the client and restart**
-   ```bash
-   npm run setup   # Rebuilds program and regenerates client
-   npm run dev
-   ```
+        Result: The gig is marked Complete, and 0.1 SOL is transferred to Wallet B.
 
-## Testing
+## 🛠️ Troubleshooting
 
-Tests use [LiteSVM](https://github.com/LiteSVM/litesvm), a fast lightweight Solana VM for testing.
+    Error: 403 Forbidden on Deployment:
 
-```bash
-npm run anchor-build   # Build the program first
-npm run anchor-test    # Run tests
-```
+        This means the public RPC node is blocking your Vercel domain.
 
-The tests are in `anchor/programs/vault/src/tests.rs` and automatically use the program ID from `declare_id!`.
+        Fix: Ensure you are using a Helius/QuickNode RPC URL in your AppWalletProvider.tsx and have whitelisted your Vercel domain in the Helius dashboard.
 
-## Regenerating the Client
+    Transaction Simulation Failed:
 
-If you modify the program, regenerate the TypeScript client:
+        Usually means you are trying to perform an action not allowed by the state (e.g., applying to a gig that is already "In Progress").
 
-```bash
-npm run setup   # Or: npm run anchor-build && npm run codama:js
-```
+        Check the console for specific Anchor error codes.
 
-This uses [Codama](https://github.com/codama-idl/codama) to generate a type-safe client from the Anchor IDL.
+🔮 Future Roadmap
 
-## Learn More
+    [ ] USDC Support: Upgrade from native SOL to SPL Tokens for stable payments.
 
-- [Solana Docs](https://solana.com/docs) - core concepts and guides
-- [Anchor Docs](https://www.anchor-lang.com/docs) - program development framework
-- [Deploying Programs](https://solana.com/docs/programs/deploying) - deployment guide
-- [framework-kit](https://github.com/solana-foundation/framework-kit) - the React hooks used here
-- [Codama](https://github.com/codama-idl/codama) - client generation from IDL
+    [ ] Dispute Resolution: Add an "Arbiter" role to resolve disagreements between posters and workers.
+
+    [ ] User Profiles: Store usernames and avatars using IPFS.
+
+    [ ] Reputation System: On-chain reputation scores for reliable workers.
+
+📄 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+👨‍💻 Author
+
+Sanchit Goyal
+
+    GitHub: @sanchit-4
+
+    Twitter: @Sanchitgoyal283
+
+Built with ❤️ on Solana.
